@@ -1,0 +1,29 @@
+{
+  "name": "GetResponse - 拦截AJAX请求响应体",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "icons": {
+    "48": "icons/icon48.png"
+  },
+  "description": "获取http/https响应的Chrome扩展程序",
+  "permissions": ["storage", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["lib/vconsole.min.js", "lib/asejs.min.js", "lib/pako.min.js", "content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["injected.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/inactive/icon16.png",
+      "48": "icons/inactive/icon48.png"
+    }
+  }
+}
