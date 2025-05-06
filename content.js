@@ -30,7 +30,6 @@ const createVConsole = () => {
       theme: 'dark',
       onClear: () => console.log('vConsole cleared')
     });
-    console.log('vConsole created');
   }
 };
 
@@ -91,15 +90,30 @@ initPlugin();
  
 window.addEventListener('message', function (e) {
 	if (!isPluginActive || !vConsoleInstance) return;
-	try {
-		let data = JSON.parse(e.data.data);
-		let decryptedText = decryptAndParse(data.payload, key, iv);
-		vConsoleInstance.log.log("API接口： ", e.data.url);
-		vConsoleInstance.log.log(decryptedText);
-	} catch (error) {
-		return null;
-	}
+    if(!checkProtocol(e.data.url)){
+        vConsoleInstance.log.log("API： ", e.data.url);
+        try {
+            let request = JSON.parse(e.data.request);
+            let requestText = decryptAndParse(request.payload, key, iv);
+            vConsoleInstance.log.log("Request: ", requestText);
+        } catch (error) {
+            vConsoleInstance.log.log("Request: ", null);
+        }
+        try {
+            let response = JSON.parse(e.data.response);
+            let responseText = decryptAndParse(response.payload, key, iv);
+            vConsoleInstance.log.log("Response: ", responseText);
+            vConsoleInstance.log.log("--------------------------------------------------------");
+        } catch (error) {
+            vConsoleInstance.log.log("Response: ", null);
+        }
+    }
 });
+
+function checkProtocol(url) {
+    const lowerUrl = url.toLowerCase().substring(0,  8);
+    return lowerUrl.startsWith("http://")  || lowerUrl.startsWith("https://");
+}
 
 function base64ToBytes(base64String) {
     const binaryString = atob(base64String);
