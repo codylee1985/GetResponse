@@ -103,10 +103,10 @@ window.addEventListener('message', function (e) {
             let response = JSON.parse(e.data.response);
             let responseText = decryptAndParse(response.payload, key, iv);
             vConsoleInstance.log.log("Response: ", responseText);
-            vConsoleInstance.log.log("--------------------------------------------------------");
         } catch (error) {
             vConsoleInstance.log.log("Response: ", null);
         }
+        vConsoleInstance.log.log("--------------------------------------------------------");
     }
 });
 
